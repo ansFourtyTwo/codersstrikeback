@@ -18,6 +18,14 @@ class TestPoint(unittest.TestCase):
         
         self.assertTrue(p.to_list() == [0.8, 0.3])
         
+    def test_equality(self):
+        p1 = Point(0.5, 0.3)
+        p2 = Point(0.5, 0.3)
+        p3 = Point(0.4, 0.2)
+        
+        self.assertEqual(p1, p2)
+        self.assertNotEqual(p1, p3)
+        
         
 class TestVector(unittest.TestCase):
     def test_string_representation(self):

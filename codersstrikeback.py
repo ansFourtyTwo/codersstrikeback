@@ -11,6 +11,10 @@ class Point:
     def __repr__(self):
         return f'{self.__class__.__name__}({self.x}, {self.y})'
         
+    def __eq__(self, other):
+        return self.__class__ == other.__class__ and self.x == other.x and self.y == other.y
+            
+        
     @classmethod
     def from_list(cls, li):
         x, y = map(float, li)
