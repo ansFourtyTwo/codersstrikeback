@@ -59,12 +59,18 @@ class Pod:
         self._villain = villain
         self._opponent = None
         
+        self._frame = 0
         self._location = Point()
         self._next_checkpoint = Point()
         self._speed = Vector()
         self._distance = 0
         self._angle = 0
-        self._thrust = 0
+        self._thrust = 100
+        
+        self._lap = 1
+        self._visited_checkpoints = []
+        self._all_checkpoints_visited = False
+        
         
     def is_villain(self):
         return self._villain
@@ -72,13 +78,29 @@ class Pod:
     def set_opponent(self, pod):
         self._opponent = pod
         
+    def increment_frame(self):
+        self._frame += 1
+        
     def set_location(self, x, y):
         self._speed = Vector(x, y) - Vector(self._location.x, self._location.y)
         self._location = Point(x, y)
         
     def set_checkpoint(self, x, y):
-        self._next_checkpoint = Point(x, y)
+        cp = Point(x, y)
         
+        if self._frame == 1:
+            self._next_checkpoint = cp
+        else:
+            if cp != self._next_checkpoint:
+                if cp in self._visited_checkpoints:
+                    self._all_checkpoints_visited = True
+                    if cp == self._visited_checkpoints[0]:
+                        self._lap +=1
+                else:
+                    self._visited_checkpoints.append(self._next_checkpoint)
+                
+                self._next_checkpoint = cp
+                
     def set_distance(self, distance):
         self._distance = distance
     
@@ -107,11 +129,11 @@ class Game:
         x, y, nx, ny, nd, na = [int(i) for i in input().split()]
         ox, oy = [int(i) for i in input().split()]
         
+        self.hero.increment_frame()
         self.hero.set_location(x, y)
         self.hero.set_checkpoint(nx, ny)
         self.hero.set_distance(nd)
         self.hero.set_angle(na)
-        self.hero.accelerate(2)
         self.villain.set_location(ox, oy)
         
 
