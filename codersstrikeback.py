@@ -1,9 +1,54 @@
 import sys
 import math
 
-# Auto-generated code below aims at helping you parse
-# the standard input according to the problem statement.
+LAPS = 3
 
+class Point:
+    def __init__(self, x=0.0, y=0.0):
+        self.x = x
+        self.y = y
+        
+    def __repr__(self):
+        return f'{self.__class__.__name__}({self.x}, {self.y})'
+        
+    @classmethod
+    def from_list(cls, li):
+        x, y = map(float, li)
+        return cls(x, y)
+        
+    def to_list(self):
+        return [self.x, self.y]
+
+
+class Vector(Point):
+    def __init__(self, x=0.0, y=0.0):
+        super(Vector, self).__init__(x, y)
+    
+    @classmethod
+    def from_point(cls, p):
+        return cls(p.x, p.y)
+        
+    def __neg__(self):
+        return Vector(-self.x, -self.y)
+    
+    def __add__(self, other):
+        if isinstance(other, Vector):
+            return Vector(self.x + other.x, self.y + other.y)
+        return Vector(self.x + other, self.y + other)
+    __radd__ = __add__
+        
+    def __sub__(self, other):
+        return self+(-other)
+    __rsub__ = __sub__
+        
+    def __mul__(self, other):
+        if isinstance(other, Vector):
+            return Vector(self.x * other.x, self.y * other.y)
+        return Vector(self.x * other, self.y * other)
+    __rmul__ = __mul__
+        
+
+"""
 boost_used = False
 
 def pod_on_target(radius, distance, angle):
@@ -81,3 +126,4 @@ while True:
     # followed by the power (0 <= thrust <= 100)
     # i.e.: "x y thrust"
     print(f'{cp_x} {cp_y} {th}')
+"""    
