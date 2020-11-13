@@ -110,11 +110,22 @@ class Pod:
     def accelerate(self, thrust_diff):
         self._thrust += thrust_diff
         
-    def get_instructions(self):
+    def print_instructions(self):
         next_x = int(self._next_checkpoint.x)
         next_y = int(self._next_checkpoint.y)
         th = self._thrust
-        return f'{next_x} {next_y} {th}'
+        print(f'{next_x} {next_y} {th}')
+        
+    def print_statistics(self):
+        print(
+            f'Frame: {self._frame}\n'
+            f'Position: {self._location}\n'
+            f'Speed: {self._speed}\n'
+            f'Lap: {self._lap} of {LAPS}\n'
+            f'Next CP: {self._next_checkpoint}\n'
+            f'All CP visited: {self._all_checkpoints_visited}\n',
+            file=sys.stderr, flush=True
+        )
         
         
 class Game:
@@ -136,12 +147,13 @@ class Game:
         self.hero.set_angle(na)
         self.villain.set_location(ox, oy)
         
-
 # The game loop
 game = Game()
 while True:
     game.get_data()
-    print(game.hero.get_instructions())
+    game.hero.print_statistics()
+    game.hero.print_instructions()
+
     
 """
 boost_used = False
