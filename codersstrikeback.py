@@ -46,8 +46,77 @@ class Vector(Point):
             return Vector(self.x * other.x, self.y * other.y)
         return Vector(self.x * other, self.y * other)
     __rmul__ = __mul__
+    
+    
+class Pod:
+    def __init__(self, teamname, number, villain=False):
+        self._teamname = teamname
+        self._number = number
+        self._villain = villain
+        self._opponent = None
+        
+        self._location = Point()
+        self._next_checkpoint = Point()
+        self._speed = Vector()
+        self._distance = 0
+        self._angle = 0
+        self._thrust = 0
+        
+    def is_villain(self):
+        return self._villain
+        
+    def set_opponent(self, pod):
+        self._opponent = pod
+        
+    def set_location(self, x, y):
+        self._speed = Vector(x, y) - Vector(self._location.x, self._location.y)
+        self._location = Point(x, y)
+        
+    def set_checkpoint(self, x, y):
+        self._next_checkpoint = Point(x, y)
+        
+    def set_distance(self, distance):
+        self._distance = distance
+    
+    def set_angle(self, angle):
+        self._angle = angle
+        
+    def accelerate(self, thrust_diff):
+        self._thrust += thrust_diff
+        
+    def get_instructions(self):
+        next_x = int(self._next_checkpoint.x)
+        next_y = int(self._next_checkpoint.y)
+        th = self._thrust
+        return f'{next_x} {next_y} {th}'
+        
+        
+class Game:
+    def __init__(self):
+        self.hero = Pod("Team 42", 1)
+        self.villain = Pod("Opponent", 1, True)
+        
+        self.hero.set_opponent(self.villain)
+        self.villain.set_opponent(self.hero)
+        
+    def get_data(self):
+        x, y, nx, ny, nd, na = [int(i) for i in input().split()]
+        ox, oy = [int(i) for i in input().split()]
+        
+        self.hero.set_location(x, y)
+        self.hero.set_checkpoint(nx, ny)
+        self.hero.set_distance(nd)
+        self.hero.set_angle(na)
+        self.hero.accelerate(2)
+        self.villain.set_location(ox, oy)
         
 
+# The game loop
+game = Game()
+while True:
+    game.get_data()
+    print(game.hero.get_instructions())
+    
 """
 boost_used = False
 
